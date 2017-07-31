@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block main_css %}
+    <link rel="stylesheet" href="/static/css/bootstrapValidator.css"/>
+    <style>
+        form {
+            padding-top: 20px;
+        }
+        .form-group {
+            height: 70px;
+        }
+        input.form-control[name="checkCode"] {
+            width: 50%;
+            display: inline-block;
+        }
+        img {
+            margin-left: 8px;
+        }
+    </style>
+{% endblock %}
+
+{% block main_html %}
+    <div class="container">
+        <div class="row">
+            <section>
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="page-header">
+                        <h2>登录</h2>
+                    </div>
+
+                    <form id="defaultForm" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-lg-offset-1 control-label">学号：</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="ID" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 col-lg-offset-1 control-label">密码：</label>
+                            <div class="col-lg-4">
+                                <input type="password" class="form-control" name="password" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 col-lg-offset-1 control-label">验证码：</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="checkCode" />
+                                <img id="checkCode" src="{{ pic }}" alt="checkCode picture">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 col-lg-offset-1 control-label">网址选择：</label>
+                            <div class="col-lg-5">
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" name="line" value="1"/> 线路一
+                                    </label>
+                                </div>
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" name="line" value="2" checked/> 线路二
+                                    </label>
+                                </div>
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" name="line" value="3" /> 线路三
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-9 col-lg-offset-4">
+                                <button type="submit" class="btn btn-primary" id="submitBtn" name="signup">登录</button>
+                                <button type="button" class="btn btn-info" id="validateBtn">手动验证</button>
+                                <button type="button" class="btn btn-primary" id="resetBtn">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_js %}
+    <script src="/static/js/bootstrapValidator.js"></script>
+    <script src="/static/js/login.js"></script>
+{% endblock %}

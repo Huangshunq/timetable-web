@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block main_css %}
+{% endblock %}
+
+{% block main_html %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>error: {{ status }}</h1>
+            </div>
+        </div>
+        <div class="row well">
+            <div class="col-md-12">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+        <div class="row well">
+            <div class="col-md-12">
+                <a href="/">重新登录</a>
+            </div>
+        </div>
+        <div class="row well">
+            <div class="col-md-12">
+                <h2>常见错误</h2>
+                <ol>
+                    <li>"Error: ETIMEDOUT" : 请求超过10秒未响应，放弃等待</li>
+                    <li>"Not Acceptable" : 登录信息或有错误导致无法登录</li>
+                    <li>"internal server error" : 500 正方服务器错误</li>
+                    <li>"Service Unavailable" : 503 正方服务器关闭</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_js %}
+{% endblock %}
