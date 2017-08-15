@@ -1,8 +1,6 @@
-
 const fs = require('mz/fs');
-
 // 检查验证码图片数量
-(function () {
+const checkCheckCode = () => {
     fs.readdir('./static/img')
       .then(files => {
           if (files.length > 10) {
@@ -17,7 +15,9 @@ const fs = require('mz/fs');
             console.log(`checkCode count: ${files.length}`);
           }
       });
-})();
+};
+
+checkCheckCode();
 
 const writeCheckCode = async (Session_Val, body) => {
     await fs.writeFile(`static/img/${Session_Val}.gif`, body)
@@ -37,11 +37,11 @@ const deleteCheckCode = (Session_Val) => {
         // })
         .catch(err => {
             console.log(`failed to unlink file: ${Session_Val}.gif`);
-            // throw err;
+            checkCheckCode();
         });
 };
 
 module.exports = {
     writeCheckCode,
     deleteCheckCode    
-}
+};
