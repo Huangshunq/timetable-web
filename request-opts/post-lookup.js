@@ -1,4 +1,3 @@
-// post-lookup.js
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const request = require('request-promise-native').defaults({
@@ -73,7 +72,7 @@ const setPostLookupOpt = ({cookie, uri, timetableUri, __EVENTTARGET, __VIEWSTATE
     }
 };
 
-const getTimetable = async (cookie = void(0), query = {}) => {
+const getTimetable = (cookie = void(0), query = {}) => {
     let __EVENTTARGET;
     let {
         homePageUri,
@@ -88,11 +87,13 @@ const getTimetable = async (cookie = void(0), query = {}) => {
      } = query;
     if (!__VIEWSTATE && homePageUri) {
         const getSubdoc = require('./get-subdoc');
-        const $ = await getSubdoc(cookie, timetableUri, homePageUri, line);
-        return {
-            $,
-            __VIEWSTATE: $('input[name="__VIEWSTATE"]').val()
-        };
+        return getSubdoc(cookie, timetableUri, homePageUri, line)
+                .then($ => {
+                    return {
+                        $,
+                        __VIEWSTATE: $('input[name="__VIEWSTATE"]').val()
+                    };
+                });
     } else if (!cookie || !timetableUri || !uri  || !defxnd || !defxqd || !xnd || !xqd) {
         throw new Error('can not find all query params');
     } else {
@@ -120,28 +121,27 @@ const getTimetable = async (cookie = void(0), query = {}) => {
                                 line
                             });
 
-    const $ = await request(POST_LOOKUP_OPTS)
-                    .then(res => {
-                        const $ = cheerio.load(iconv.decode(res.body, 'gb2312'));
-                        return $;
-                    })
-                    .catch(err => {
-                        if (err.response && err.response.statusMessage) {
-                            console.log(`failed to lookup: ${err.response.statusMessage}`);
-                        }
-                        if (err.statusCode === 503 || err.statusCode === 500) {
-                            // 500: 'Internal Server Error'
-                            // 503: 'Service Unavailable'
-                            err.message = err.response.statusMessage || 'The server is currently unable to handle the request';
-                        } else if (!err.message) {
-                            err.message = 'Unknown error';
-                        }
-                        throw err;
-                    });
-    return {
-        $,
-        __VIEWSTATE: $('input[name="__VIEWSTATE"]').val()
-    };
+    return request(POST_LOOKUP_OPTS)
+            .then(res => {
+                const $ = cheerio.load(iconv.decode(res.body, 'gb2312'));
+                return {
+                    $,
+                    __VIEWSTATE: $('input[name="__VIEWSTATE"]').val()
+                };
+            })
+            .catch(err => {
+                if (err.response && err.response.statusMessage) {
+                    console.log(`failed to lookup: ${err.response.statusMessage}`);
+                }
+                if (err.statusCode === 503 || err.statusCode === 500) {
+                    // 500: 'Internal Server Error'
+                    // 503: 'Service Unavailable'
+                    err.message = err.response.statusMessage || 'The server is currently unable to handle the request';
+                } else if (!err.message) {
+                    err.message = 'Unknown error';
+                }
+                throw err;
+            });
 };
 
 module.exports = getTimetable;

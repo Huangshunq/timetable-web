@@ -11,9 +11,6 @@ const callback = async (ctx, next) => {
         if (Session_Val === '') {
             throw new Error('failed to get cookie');
         } 
-        // else {
-        //     console.log(`manage to load cookie: ${Session_Val}`);
-        // }
 
         // get schedule message
         // console.log(ctx.request.query);

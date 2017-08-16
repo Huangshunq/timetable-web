@@ -35,21 +35,19 @@ const callback = async (ctx, next) => {
         // checkValidity
         const body = checkValidity(Session_Val, ctx.request.body);
 
-        // get uriObj
         const homePageUri = await postLogin(Session_Val, body);
 
-        if (!homePageUri) {
+        if (homePageUri === '') {
             throw new Error('failed to get homePageUri');
         }
 
-
+        // get uriObj
         const uriObj = await getSubUri(Session_Val, homePageUri, body.line);
 
-        if (!uriObj) {
+        // get personal message
+        if (!uriObj['N121602'].uri) {
             throw new Error('failed to get uri');
         }
-
-        // get personal message
         const timetableUri = uriObj['N121602'].uri;
         const $ = await getSubdoc(Session_Val, timetableUri, homePageUri, body.line);
         // console.log(timetableJSON);

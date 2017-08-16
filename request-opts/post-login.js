@@ -1,4 +1,3 @@
-
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const deleteCheckCode = require('../model/checkCode').deleteCheckCode;
@@ -82,31 +81,33 @@ const setPostLoginOpt = (cookie, {ID, password, checkCode, line = 2}) => {
     }
 };
 
-const postLogin = async (Session_Val, body) => {
-    // post logOn request
+// post logOn request
+const postLogin = (Session_Val, body) => {
     const POST_LOGON_OPTS = setPostLoginOpt(Session_Val, body);
     // console.log(POST_LOGON_OPTS);
-    const homePageUri = await request(POST_LOGON_OPTS)
-                            .then(res => {
-                                deleteCheckCode(Session_Val);
-                                if (res.statusCode >= 500) {
-                                    // 500 'internal server error'
-                                    // 503 'Service Unavailable'
-                                    throw new Error(`failed to login: ${res.statusMessage}`);
-                                } else if (res.statusCode === 302 && res.headers.location) { 
-                                    // 302 get redirect location
-                                    // console.log(`manage to get location: ${res.headers.location || null}`);
-                                    return res.headers.location || null;
-                                } else if (res.statusCode === 200) {
-                                    const $body = cheerio.load(iconv.decode(res.body, 'gb2312')),
-                                          alertMsg = $body('#form1').children().last().html().match(/\'{1}\S+?\'{1}/)[0];
-                                    // console.log(`${res.statusCode} : ${alertMsg}`);
-                                    throw new Error(`Not Acceptable`);
-                                } else {
-                                    throw new Error(`${res.statusCode} : Unknown error`);
-                                }
-                            });
-    return homePageUri;
+    return request(POST_LOGON_OPTS)
+            .then(res => {
+                deleteCheckCode(Session_Val);
+                let homePageUri = '';
+                if (res.statusCode >= 500) {
+                    // 500 'internal server error'
+                    // 503 'Service Unavailable'
+                    throw new Error(`failed to login: ${res.statusMessage}`);
+                } else if (res.statusCode === 302 && res.headers.location) { 
+                    // 302 get redirect location
+                    // console.log(`manage to get location: ${res.headers.location}`);
+                    homePageUri = res.headers.location;
+                } else if (res.statusCode === 200) {
+                    const $body = cheerio.load(iconv.decode(res.body, 'gb2312')),
+                            alertMsg = $body('#form1').children().last().html().match(/\'{1}\S+?\'{1}/)[0];
+                    console.log(alertMsg);
+                    throw new Error(`Not Acceptable`);
+                } else {
+                    throw new Error(`${res.statusCode} : Unknown error`);
+                }
+                return homePageUri;
+            });
+
 };
 
 module.exports = postLogin;

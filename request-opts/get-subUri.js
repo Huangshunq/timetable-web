@@ -1,4 +1,3 @@
-// get-subUri.js
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const request = require('request-promise-native').defaults({
@@ -50,12 +49,11 @@ const setGetMainPageOpt = (cookie, homePageUri, line = 2) => {
     }
 };
 
-const getSubUri = async (Session_Val, homePageUri, line = 2) => {
-    // redirect request and get uriObj
+ // redirect request and get uriObj
+const getSubUri = (Session_Val, homePageUri, line = 2) => {
     const GET_MAIN_PAGE_OPTS = setGetMainPageOpt(Session_Val, homePageUri, line);
     // console.log(GET_MAIN_PAGE_OPTS);
-    let uriObj = null;
-    await request(GET_MAIN_PAGE_OPTS)
+    return request(GET_MAIN_PAGE_OPTS)
             .then(res => {
                 // get uriObj
                 const body = iconv.decode(res.body, 'gb2312'),
@@ -65,15 +63,15 @@ const getSubUri = async (Session_Val, homePageUri, line = 2) => {
                         tagArr = $('a[target="zhuti"]').toArray();
                     // 学生个人课表
                     //  URI = $('.sub').eq(4).find('a')[0].attribs.href || '',
-                uriObj = {};
+                let uriObj = {};
                 for (tag of tagArr) {
                     const name = $(tag).text(),
                             uri = tag.attribs.href,
                             key = uri.slice(-7);
                     uriObj[key] = { name, uri };
                 }
+                return uriObj;
             });
-    return uriObj;
 };
 
 module.exports = getSubUri;

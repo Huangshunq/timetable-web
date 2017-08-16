@@ -3,7 +3,7 @@ const fs = require('mz/fs');
 const checkCheckCode = () => {
     fs.readdir('./static/img')
       .then(files => {
-          if (files.length > 10) {
+          if (files.length >= 10) {
             files.forEach((el) => {
                 fs.unlink(`static/img/${el}`)
                   .catch(err => {
@@ -19,8 +19,8 @@ const checkCheckCode = () => {
 
 checkCheckCode();
 
-const writeCheckCode = async (Session_Val, body) => {
-    await fs.writeFile(`static/img/${Session_Val}.gif`, body)
+const writeCheckCode = (Session_Val, body) => {
+    return fs.writeFile(`static/img/${Session_Val}.gif`, body)
             // .then(() => {
             //     console.log(`manage to write gif: ${Session_Val}.gif`);
             // })

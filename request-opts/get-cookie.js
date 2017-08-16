@@ -1,4 +1,3 @@
-
 const request = require('request-promise-native').defaults({
     headers: {
         "User-Agent"                : "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0",
@@ -44,11 +43,11 @@ const setGetCookieOpt = (line = 2) => {
     }
 };
 
-const getCookie = async (line = 2) => {
+const getCookie = (line = 2) => {
     const GET_COOKIE_OPTS = setGetCookieOpt(line);
-    let Session_Val = '';
-    await request(GET_COOKIE_OPTS)
+    return request(GET_COOKIE_OPTS)
             .then(res => {
+                let Session_Val = '';
                 if (res.headers['set-cookie']) {
                     // Session_KVP: 将要获取的 ASP.NET_SessionId 键值对的字符串，以 “=”连接
                     // Session_Val: 将要获取的 ASP.NET_SessionId 的值
@@ -60,6 +59,7 @@ const getCookie = async (line = 2) => {
                 } else {
                     throw new Error(`failed to get cookie from res.headers`);
                 }
+                return Session_Val;
                 // console.log(`manage to get Session_Val: ${Session_Val}`);
             })
             .catch(err => {
@@ -75,7 +75,6 @@ const getCookie = async (line = 2) => {
                 }
                 throw err;
             });
-    return Session_Val;
 };
 
 module.exports = getCookie;

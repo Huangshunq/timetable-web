@@ -1,4 +1,3 @@
-// get-subdoc.js
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const request = require('request-promise-native').defaults({
@@ -50,29 +49,27 @@ const setGetSubdocOpt = (cookie, uri, homePageUri, line = 2) => {
     }
 };
 
-const getSubdoc = async (Session_Val, timetableUri, homePageUri, line = 2) => {
+const getSubdoc = (Session_Val, timetableUri, homePageUri, line = 2) => {
     const GET_SCHEDULE_OPTS = setGetSubdocOpt(Session_Val, timetableUri, homePageUri, line);
     // console.log(GET_SCHEDULE_OPTS);
-    const $ = await request(GET_SCHEDULE_OPTS)
-                    .then(res => {
-                        const body = iconv.decode(res.body, 'gb2312'),
-                                $ = cheerio.load(body);
-                        return $;
-                    })
-                    .catch(err => {
-                        if (err.statusCode === 302 || err.statusCode === 404) {
-                            // html: Object move to here
-                            // console.log(res.statusCode);
-                            throw new Error('Object move to here');
-                        } else if (err.statusCode >= 500) {
-                            err.message = err.response.statusMessage || 'The server is currently unable to handle the request';
-                            throw err;
-                        } else {
-                            throw new Error(`${res.statusCode} : Unknown error`);
-                        }
-                    });
-
-    return $;
+    return request(GET_SCHEDULE_OPTS)
+            .then(res => {
+                const body = iconv.decode(res.body, 'gb2312'),
+                        $ = cheerio.load(body);
+                return $;
+            })
+            .catch(err => {
+                if (err.statusCode === 302 || err.statusCode === 404) {
+                    // html: Object move to here
+                    // console.log(res.statusCode);
+                    throw new Error('Object move to here');
+                } else if (err.statusCode >= 500) {
+                    err.message = err.response.statusMessage || 'The server is currently unable to handle the request';
+                    throw err;
+                } else {
+                    throw new Error(`${res.statusCode} : Unknown error`);
+                }
+            });
 };
 
 module.exports = getSubdoc;

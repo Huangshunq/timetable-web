@@ -1,4 +1,3 @@
-// get-checkCode.js
 const writeCheckCode = require('../model/checkCode').writeCheckCode;
 const request = require('request-promise-native').defaults({
     headers: {
@@ -47,17 +46,18 @@ const setGetCheckCodeOpt = (cookie, line = 2) => {
     }
 };
 
-const getCheckCode = async (Session_Val, line = 2) => {
+const getCheckCode = (Session_Val, line = 2) => {
     const GET_PIC_OPTS = setGetCheckCodeOpt(Session_Val, line);
     // console.log(GET_PIC_OPTS);
-    await request(GET_PIC_OPTS)
-            .then(async res => {
-                await writeCheckCode(Session_Val, res.body);
-            })
+    return request(GET_PIC_OPTS)
+            .then(
+                res => writeCheckCode(Session_Val, res.body)
+            ).then(
+                () => `/static/img/${Session_Val}.gif`
+            )
             .catch(err => {
                 throw err;
             });
-    return `/static/img/${Session_Val}.gif`;
 };
 
 module.exports = getCheckCode;
