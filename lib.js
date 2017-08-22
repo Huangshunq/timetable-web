@@ -14,6 +14,24 @@ const toWeekNum = char => {
     }
 }
 
+const checkValidity = (Session_Val, {ID, password, checkCode, line}) => {
+    if (typeof Session_Val !== 'string' || Session_Val.search(/^\w{24}$/) === -1) {
+        throw new Error(`cookie is invalid`);
+    } else if (typeof ID !== 'string' || ID.search(/^\d{12}$/) === -1) {
+        throw new Error(`ID is invalid: ${ID}`);
+    } else if (typeof password !== 'string' || password === '') {
+        throw new Error(`password is invalid: ${password}`);
+    } else if (typeof checkCode !== 'string' || checkCode.search(/^\w{4}$/) === -1) {
+        throw new Error(`checkCode is invalid: ${checkCode}`);
+    } else if (typeof line !== 'string' || line.search(/^[0-9]{1}$/) === -1){
+        throw new Error(`line is invalid: ${line}`);
+    } else {
+        // console.log(`manage to load cookie: ${Session_Val}`);
+        // console.log(`manage to load ID: ${ID}, password's length: ${password.length}, checkCode: ${checkCode}`);
+        return {ID, password, checkCode, line};
+    }
+};
+
 const getTimetableJSON = $ => {
     const $table = $('#Table1');
     let timetableJSON = {},
@@ -94,6 +112,7 @@ const getSelectOpts = $select => {
 };
 
 module.exports = {
+    checkValidity,
     getTimetableJSON,
     getSelectOpts
 };

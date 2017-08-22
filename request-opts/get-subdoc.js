@@ -62,13 +62,11 @@ const getSubdoc = (Session_Val, timetableUri, homePageUri, line = 2) => {
                 if (err.statusCode === 302 || err.statusCode === 404) {
                     // html: Object move to here
                     // console.log(res.statusCode);
-                    throw new Error('Object move to here');
+                    return Promise.reject(new Error('Object move to here'));
                 } else if (err.statusCode >= 500) {
                     err.message = err.response.statusMessage || 'The server is currently unable to handle the request';
-                    throw err;
-                } else {
-                    throw new Error(`${res.statusCode} : Unknown error`);
                 }
+                return Promise.reject(err);
             });
 };
 

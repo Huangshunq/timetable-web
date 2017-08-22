@@ -92,7 +92,7 @@ const postLogin = (Session_Val, body) => {
                 if (res.statusCode >= 500) {
                     // 500 'internal server error'
                     // 503 'Service Unavailable'
-                    throw new Error(`failed to login: ${res.statusMessage}`);
+                    return Promise.reject(new Error(`failed to login: ${res.statusMessage}`));
                 } else if (res.statusCode === 302 && res.headers.location) { 
                     // 302 get redirect location
                     // console.log(`manage to get location: ${res.headers.location}`);
@@ -101,9 +101,9 @@ const postLogin = (Session_Val, body) => {
                     const $body = cheerio.load(iconv.decode(res.body, 'gb2312')),
                             alertMsg = $body('#form1').children().last().html().match(/\'{1}\S+?\'{1}/)[0];
                     console.log(alertMsg);
-                    throw new Error(`Not Acceptable`);
+                    return Promise.reject(new Error(`Not Acceptable`));
                 } else {
-                    throw new Error(`${res.statusCode} : Unknown error`);
+                    return Promise.reject(new Error(`${res.statusCode} : Unknown error`));
                 }
                 return homePageUri;
             });

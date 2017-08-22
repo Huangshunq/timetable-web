@@ -21,13 +21,12 @@ checkCheckCode();
 
 const writeCheckCode = (Session_Val, body) => {
     return fs.writeFile(`static/img/${Session_Val}.gif`, body)
-            // .then(() => {
-            //     console.log(`manage to write gif: ${Session_Val}.gif`);
-            // })
-            .catch(err => {
-                console.log('failed to write gif');
-                throw err;
-            });
+            .then(
+                () => Promise.resolve(`manage to write gif: ${Session_Val}.gif`)
+            )
+            .catch(
+                () => Promise.reject(new Error('failed to write gif'))
+            );
 };
 
 const deleteCheckCode = (Session_Val) => {

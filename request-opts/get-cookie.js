@@ -57,10 +57,10 @@ const getCookie = (line = 2) => {
                     Session_Val = res.request.uri.path.substring(2,26);
                     // console.log(`get path: ${res.request.uri.path}`);
                 } else {
-                    throw new Error(`failed to get cookie from res.headers`);
+                    return Promise.reject(new Error('failed to get cookie from res.headers'));
                 }
-                return Session_Val;
                 // console.log(`manage to get Session_Val: ${Session_Val}`);
+                return Session_Val;
             })
             .catch(err => {
                 if (err.statusCode === 503 || err.statusCode === 500) {
@@ -73,7 +73,7 @@ const getCookie = (line = 2) => {
                 } else if (!err.message) {
                     err.message = 'failed to get cookie: Unknown error';
                 }
-                throw err;
+                return Promise.reject(err);
             });
 };
 

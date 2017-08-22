@@ -55,9 +55,9 @@ const getCheckCode = (Session_Val, line = 2) => {
             ).then(
                 () => `/static/img/${Session_Val}.gif`
             )
-            .catch(err => {
-                throw err;
-            });
+            .catch(
+                err => Promise.reject(err)
+            );
 };
 
 module.exports = getCheckCode;

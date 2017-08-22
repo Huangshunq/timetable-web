@@ -140,7 +140,7 @@ const getTimetable = (cookie = void(0), query = {}) => {
                 } else if (!err.message) {
                     err.message = 'Unknown error';
                 }
-                throw err;
+                return Promise.reject(err);
             });
 };
 

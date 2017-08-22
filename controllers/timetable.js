@@ -14,7 +14,10 @@ const callback = async (ctx, next) => {
 
         // get schedule message
         // console.log(ctx.request.query);
-        const { $, __VIEWSTATE, isSame } = await postLookup(Session_Val, ctx.request.query);
+        const { $, __VIEWSTATE, isSame } = await postLookup(Session_Val, ctx.request.query)
+                                                .catch(err => {
+                                                    throw err;
+                                                });
 
         if (isSame) {
             ctx.status = 304;

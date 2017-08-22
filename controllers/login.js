@@ -7,22 +7,20 @@ const callback = async (ctx, next) => {
     const isChangeLine = ctx.path === '/changeLine' ? true : false;
     try {
         // get cookie
-
+        //
         const line = isChangeLine ? parseInt(ctx.query.line) : 2;
 
-        // Session_Val: 将要获取的 ASP.NET_SessionId 的值
-        const Session_Val = await getCookie(line);
-
-        if (Session_Val === '') {
-            throw new Error('failed to get cookie');
-        }
+        // Session_Val:  ASP.NET_SessionId 
+        const Session_Val = await getCookie(line)
+                                  .catch(err => {
+                                      throw err
+                                  });
 
         // get checkCode picture
-        const checkCodeUri = await getCheckCode(Session_Val, line);
-
-        if (!checkCodeUri) {
-            throw new Error('failed to get checkCode picture');
-        }
+        const checkCodeUri = await getCheckCode(Session_Val, line)
+                                   .catch(err => {
+                                       throw err
+                                    });
 
         // set cookie
         const GETTIME = new Date().getTime();
