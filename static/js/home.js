@@ -84,7 +84,6 @@ $(function() {
             type: 'GET',
             data: {
                 uri: subdoc.uri,
-                timetableUri: subdoc.uri,
                 __VIEWSTATE: subdoc.__VIEWSTATE,
                 xnd: $xnd.val(),
                 xqd: $xqd.val(),

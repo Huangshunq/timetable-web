@@ -1,14 +1,14 @@
 const getSubdoc = require('../request-opts/get-subdoc');
 const postLookup = require('../request-opts/post-lookup');
-const { getTimetableJSON } = require('../lib');
+const { checkSessionVal, getTimetableJSON } = require('../lib');
 
 const callback = async (ctx, next) => {
     // console.log(`--- timetable.js receive request: ${ctx.params.ID} ---`);
     try {
         // Session_Val: 将要获取的 ASP.NET_SessionId 的值
-        const Session_Val = ctx.cookies.get('ASP.NET_SessionId') || '';
+        const Session_Val = ctx.cookies.get('ASP.NET_SessionId') || void(0);
 
-        if (Session_Val === '') {
+        if (!checkSessionVal(Session_Val)) {
             throw new Error('failed to get cookie');
         } 
 

@@ -77,7 +77,6 @@ const getTimetable = (cookie = void(0), query = {}) => {
     let {
         homePageUri,
         uri,
-        timetableUri,
         __VIEWSTATE,
         defxnd,
         defxqd,
@@ -87,17 +86,15 @@ const getTimetable = (cookie = void(0), query = {}) => {
      } = query;
     if (!__VIEWSTATE && homePageUri) {
         const getSubdoc = require('./get-subdoc');
-        return getSubdoc(cookie, timetableUri, homePageUri, line)
+        return getSubdoc(cookie, uri, homePageUri, line)
                 .then($ => {
                     return {
                         $,
                         __VIEWSTATE: $('input[name="__VIEWSTATE"]').val()
                     };
                 });
-    } else if (!cookie || !timetableUri || !uri  || !defxnd || !defxqd || !xnd || !xqd) {
+    } else if (!cookie || !uri || !defxnd || !defxqd || !xnd || !xqd) {
         throw new Error('can not find all query params');
-    } else {
-        timetableUri = encodeURIComponent(timetableUri);
     }
 
     if (defxnd === xnd && defxqd === xqd) {
@@ -113,7 +110,7 @@ const getTimetable = (cookie = void(0), query = {}) => {
     const POST_LOOKUP_OPTS = setPostLookupOpt({
                                 cookie, 
                                 uri, 
-                                timetableUri,
+                                timetableUri: encodeURIComponent(uri),
                                 __EVENTTARGET, 
                                 __VIEWSTATE,
                                 xnd, 

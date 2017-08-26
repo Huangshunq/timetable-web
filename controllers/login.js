@@ -1,4 +1,3 @@
-// 请求信息
 const getCookie = require('../request-opts/get-cookie');
 const getCheckCode = require('../request-opts/get-checkCode');
 
@@ -38,7 +37,7 @@ const callback = async (ctx, next) => {
         if (isChangeLine) {
             // JSON
             ctx.body = {
-                "src": `static/img/${Session_Val}.gif`,
+                "src": checkCodeUri,
                 "ASP.NET_SessionId": Session_Val
             };
         } else {
@@ -66,8 +65,6 @@ const callback = async (ctx, next) => {
 };
 
 module.exports = {
-    'GET /' : callback,
-    'GET /index' : callback,
     'GET /login' : callback,
     // 更换线路
     'GET /changeLine' : callback
