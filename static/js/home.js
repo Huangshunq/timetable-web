@@ -96,9 +96,8 @@ $(function() {
                     console.log('not modified');
                     return;
                 }
-                timetableJSON = res.main;
                 updateWeekSel(0);
-                show(timetableJSON, 1);
+                show(res.timetableJSON, 1);
                 updateBtn(1);
                 updateTermSel($defxnd, $defxqd, $xnd, $xqd);
                 subdoc.__VIEWSTATE = res.__VIEWSTATE || subdoc.__VIEWSTATE;

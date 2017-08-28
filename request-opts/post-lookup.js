@@ -94,17 +94,15 @@ const getTimetable = (cookie = void(0), query = {}) => {
                     };
                 });
     } else if (!cookie || !uri || !defxnd || !defxqd || !xnd || !xqd) {
-        throw new Error('can not find all query params');
+        return Promise.reject(new Error('can not find all query params'));
     }
 
     if (defxnd === xnd && defxqd === xqd) {
         return {
             isSame: true
         };
-    } else if (defxnd === xnd || defxqd === xqd) {
-        __EVENTTARGET = (defxnd === xnd) ? 'xqd' : 'xnd';
     } else {
-        __EVENTTARGET = 'xqd';
+        __EVENTTARGET = (defxnd === xnd) ? 'xqd' : 'xnd';
     }
 
     const POST_LOOKUP_OPTS = setPostLookupOpt({

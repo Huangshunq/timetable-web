@@ -29,7 +29,7 @@ const callback = async (ctx, next) => {
         }
 
         ctx.body = {
-            main: getTimetableJSON($),
+            timetableJSON: getTimetableJSON($),
             __VIEWSTATE
         };
         // console.log('--- finish --- \n');

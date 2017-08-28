@@ -1,11 +1,11 @@
 const fs = require('mz/fs');
 // 检查验证码图片数量
 const checkCheckCode = () => {
-    fs.readdir('./static/img')
+    fs.readdir(__dirname + '/../static/img')
       .then(files => {
-          if (files.length >= 10) {
-            files.forEach((el) => {
-                fs.unlink(`static/img/${el}`)
+        if (files.length >= 10) {
+          files.forEach((el) => {
+              fs.unlink(`${__dirname}/../static/img/${el}`)
                   .catch(err => {
                       console.log(err.stack);
                   });
@@ -20,7 +20,7 @@ const checkCheckCode = () => {
 checkCheckCode();
 
 const writeCheckCode = (Session_Val, body) => {
-    return fs.writeFile(`static/img/${Session_Val}.gif`, body)
+    return fs.writeFile(`${__dirname}/../static/img/${Session_Val}.gif`, body)
             .then(
                 () => Promise.resolve(`manage to write gif: ${Session_Val}.gif`)
             )
@@ -30,7 +30,7 @@ const writeCheckCode = (Session_Val, body) => {
 };
 
 const deleteCheckCode = (Session_Val) => {
-    fs.unlink(`static/img/${Session_Val}.gif`)
+    fs.unlink(`${__dirname}/../static/img/${Session_Val}.gif`)
         // .then(() => {
         //     console.log(`unlink file: ${Session_Val}.gif`);
         // })
