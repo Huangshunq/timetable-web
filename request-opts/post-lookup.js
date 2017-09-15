@@ -98,9 +98,9 @@ const getTimetable = (cookie = void(0), query = {}) => {
     }
 
     if (defxnd === xnd && defxqd === xqd) {
-        return {
+        return Promise.resolve.then(() => {
             isSame: true
-        };
+        });
     } else {
         __EVENTTARGET = (defxnd === xnd) ? 'xqd' : 'xnd';
     }

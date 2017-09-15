@@ -40,13 +40,16 @@ function show (JSON, week) {
             continue;
         }
         var obj = JSON[key];
-        if (week >= obj.startWeek && week <= obj.endWeek) {
-            $('#r' + obj.beginSection + 'c' + obj.dayOfWeek)
-            .html('<p>' + (obj.name || '') + '</p><p>' 
-                    + (obj.teacher || '') + '</p><p>' 
-                    +  (obj.classroom || '') + '</p>'
-                )
-            .css('background-color', '#ddd');
+        var singleOrDouble = week % 2 === 1 ? 1 : 2;
+        if (!obj.weekInfo || singleOrDouble === obj.weekInfo) {
+            if (week >= obj.startWeek && week <= obj.endWeek) {
+                $('#r' + obj.beginSection + 'c' + obj.dayOfWeek)
+                .html('<p>' + (obj.name || '') + '</p><p>' 
+                        + (obj.teacher || '') + '</p><p>' 
+                        +  (obj.classroom || '') + '</p>'
+                    )
+                .css('background-color', '#ddd');
+            }
         }
     }
 }
@@ -100,6 +103,7 @@ $(function() {
                 show(res.timetableJSON, 1);
                 updateBtn(1);
                 updateTermSel($defxnd, $defxqd, $xnd, $xqd);
+                timetableJSON = res.timetableJSON;
                 subdoc.__VIEWSTATE = res.__VIEWSTATE || subdoc.__VIEWSTATE;
                 $shift.prop('disabled', false);
             },
